@@ -89,8 +89,6 @@ module.exports.upload = (event, context, callback) => {
 
         });
     });
-
-
   } else {
       callback(null, {
           statusCode: '402',
