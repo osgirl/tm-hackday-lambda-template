@@ -1,0 +1,12 @@
+{
+  "UserPoolId": "eu-west-1_YR7d9vSOI",
+  "Username": "hackers",
+  "UserAttributes": [
+    {
+        "Name": "email",
+        "Value": "hackers@trinitymirror.com"
+    }
+  ],
+  "TemporaryPassword": "Hackday1!",
+  "ForceAliasCreation": true
+}

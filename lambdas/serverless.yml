@@ -1,0 +1,53 @@
+service: cognito-auth
+
+frameworkVersion: ">=1.5.0"
+package:
+  exclude:
+    - CognitoUserPool
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  stage: dev
+  region: eu-west-1
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: auth/hello
+          method: post
+          integration: lambda
+          cors: true
+          authorizer:
+            arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
+            claims:
+              - email
+  goodNight:
+    handler: handler.goodNight
+    events:
+      - http:
+          path: auth/good-night
+          method: post
+          integration: lambda
+          cors: true
+          authorizer:
+            arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
+            claims:
+              - email
+  upload:
+    handler: handler.upload
+    runtime: nodejs6.10
+    environment:
+      BUCKET: tm-hackday-photo-bucket-template
+      BUCKET_URL: http://tm-hackday-photo-bucket-template.s3-website-eu-west-1.amazonaws.com
+    events:
+      - http:
+          path: auth/upload
+          method: post
+          integration: lambda
+          cors: true
+          # authorizer:
+          #   arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
+          #   claims:
+          #     - email

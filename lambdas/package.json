@@ -1,0 +1,23 @@
+{
+  "name": "tm-hackday-lambda-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Trinity Mirror Hackdays",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "dependencies": {
+    "aws-sdk": "^2.156.0",
+    "file-type": "^7.3.0"
+  }
+}

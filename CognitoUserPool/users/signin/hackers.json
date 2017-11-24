@@ -1,0 +1,10 @@
+{
+    "AuthFlow": "ADMIN_NO_SRP_AUTH",
+    "AuthParameters": {
+      "USERNAME": "hackers",
+      "PASSWORD": "Hackday1!"
+    },
+    "ClientId": "erotghshj9hurchncd7qhf1op",
+    "UserPoolId": "eu-west-1_YR7d9vSOI"
+  }
+  
