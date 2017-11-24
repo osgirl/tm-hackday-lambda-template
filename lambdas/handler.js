@@ -30,15 +30,7 @@ module.exports.upload = (event, context, callback) => {
   const fileMime = fileType(fileBuffer);
   const mime = fileMime.mime;
   const ext = fileMime.ext;
-
-<<<<<<< HEAD
-  const id = () => {
-      return '_' + Math.random().toString(36).substr(2, 9);
-  };
-=======
-  console.log("file mime", fileMime);
->>>>>>> 7cf6d8b587a38b968514345c9468c4f3fa80908a
-
+  
   //validate image is on right type
   if (fileBuffer.length < 500000 ) {
 
