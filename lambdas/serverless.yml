@@ -69,3 +69,9 @@ functions:
           #   arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
           #   claims:
           #     - email
+  save-to-postgres:
+      handler: handler.store
+      events:
+        - s3:
+            bucket: tm-hackday-photo-bucket-template
+            event: s3:ObjectCreated:*

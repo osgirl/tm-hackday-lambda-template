@@ -98,3 +98,27 @@ module.exports.list = (event, context, callback) => {
   });  
   
 }
+
+module.exports.store = (event, context, callback) => {
+  const connectionString = process.env.PG_CONNECTION_STRING;
+  const tableName = process.env.PG_TABLE;
+
+  const insert_query = `INSERT INTO ${tableName}(Timestamp, BucketKey, Username, Description, FileName, StaticLink) values($1, $2, $3, $4, $5, $6)`;
+  console.log(event);
+  callback(null, {
+    statusCode: '200',
+    headers: {'Access-Control-Allow-Origin': '*'},
+    body: JSON.stringify({"results": event})
+  });
+  // pg.connect(connectionString, (err, client, done) => {
+  //   if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
+  //
+  //   client.query(insert_query,[event.timestamp, event.bucket, event.username, event.description, event.filename, event.staticurl], (err, result) => {
+  //
+  //     if(err) callback(new Error([err.statusCode], [err.message]));
+  //
+  //     client.end();
+  //
+  //     done();
+};
+
