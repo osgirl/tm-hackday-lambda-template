@@ -52,3 +52,19 @@ functions:
           #   arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
           #   claims:
           #     - email
+  list:
+    handler: handler.list
+    runtime: nodejs6.10
+    environment:
+      PG_CONNECTION_STRING: postgresql://hackers:hackers_password@hackday-pg-template.ckthmwbknecx.eu-west-1.rds.amazonaws.com:5432/hackers_db
+      PG_TABLE: hackers_table
+    events:
+      - http:
+          path: auth/upload
+          method: post
+          integration: lambda
+          cors: true
+          # authorizer:
+          #   arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
+          #   claims:
+          #     - email

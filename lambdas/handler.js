@@ -20,9 +20,9 @@ module.exports.goodNight = (event, context, callback) => {
 module.exports.upload = (event, context, callback) => {
   // const username = context.authorizer.claims.preferred_username;
   const username = "manual_user";
-  console.log("event here", JSON.stringify(event, null, 2));
+
   const title = event.body.title ? event.body.title.replace(/\W/g,'') : 'uploaded_image';
-  // const title = "manual_title";
+
   //get the image data from upload
   const body = event.body;
 
@@ -30,8 +30,6 @@ module.exports.upload = (event, context, callback) => {
   const fileMime = fileType(fileBuffer);
   const mime = fileMime.mime;
   const ext = fileMime.ext;
-
-  console.log("file mime", fileMime);
 
   const id = () => {
       return '_' + Math.random().toString(36).substr(2, 9);
@@ -101,3 +99,26 @@ module.exports.upload = (event, context, callback) => {
       });
   }
 };
+
+module.exports.list = (event, context, callback) => {
+
+  const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20`;
+  const connection = pg.connect(process.env.PG_CONNECTION_STRING, (err, client, done) => {
+    if(err) {
+      done();
+      console.log(err);
+      callback(null, {
+        statusCode: '500',
+        headers: {'Access-Control-Allow-Origin': '*'},
+        body: JSON.stringify({"message": "Error connecting to the database"})
+      });
+    }
+    done();
+    callback(null, {
+      statusCode: '200',
+      headers: {'Access-Control-Allow-Origin': '*'},
+      body: JSON.stringify({"message": "Connection to DB ok!"})
+    });
+
+  });
+}
