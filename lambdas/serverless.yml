@@ -41,6 +41,7 @@ functions:
     environment:
       BUCKET: tm-hackday-photo-bucket-template
       BUCKET_URL: http://tm-hackday-photo-bucket-template.s3-website-eu-west-1.amazonaws.com
+      DYNAMODB_TABLE: hackday-dynamo-template
     events:
       - http:
           path: auth/upload
