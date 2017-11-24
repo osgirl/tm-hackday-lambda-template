@@ -40,14 +40,11 @@ module.exports.upload = (event, context, callback) => {
     const timestamp = Math.floor(new Date() / 1000);
     const fileName = `${title}-${timestamp}.${ext}`;
 
-
     const bucket = process.env.BUCKET;
     const bucket_url = process.env.BUCKET_URL;
-    const connectionString = process.env.DATABASE_URL;
-    const tableName = process.env.POSTGRES_TABLE;
-    const staticurl = `${BUCKET_URL}/fileName`;
-
-    //const client = new pg.Client(connectionString);
+    const connectionString = process.env.PG_CONNECTION_STRING;
+    const tableName = process.env.PG_TABLE;
+    const staticurl = `${BUCKET_URL}/${fileName}`;
 
     const params = {
         Body: fileBuffer,
@@ -55,7 +52,6 @@ module.exports.upload = (event, context, callback) => {
         Bucket: bucket,
         ContentEncoding: 'base64',
         ContentType: mime,
-        // ACL: "public-read",
         Metadata:{
           ContentType: mime,
           "user": username,

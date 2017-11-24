@@ -41,7 +41,8 @@ functions:
     environment:
       BUCKET: tm-hackday-photo-bucket-template
       BUCKET_URL: http://tm-hackday-photo-bucket-template.s3-website-eu-west-1.amazonaws.com
-      DYNAMODB_TABLE: hackday-dynamo-template
+      PG_CONNECTION_STRING: postgresql://hackers:hackers_password@hackday-pg-template.ckthmwbknecx.eu-west-1.rds.amazonaws.com:5432/hackers_db
+      PG_TABLE: hackers_table
     events:
       - http:
           path: auth/upload

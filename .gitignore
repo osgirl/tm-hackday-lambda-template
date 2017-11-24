@@ -2,3 +2,4 @@
 .serverless
 config.json
 CognitoUserPool/edit
+node_modules/
