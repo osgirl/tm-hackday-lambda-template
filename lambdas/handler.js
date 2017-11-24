@@ -18,6 +18,8 @@ module.exports.goodNight = (event, context, callback) => {
 };
 
 module.exports.upload = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   // const username = context.authorizer.claims.preferred_username;
   const username = "manual_user";
 
@@ -30,7 +32,7 @@ module.exports.upload = (event, context, callback) => {
   const fileMime = fileType(fileBuffer);
   const mime = fileMime.mime;
   const ext = fileMime.ext;
-  
+
   //validate image is on right type
   if (fileBuffer.length < 500000 ) {
 
@@ -97,6 +99,8 @@ module.exports.upload = (event, context, callback) => {
 };
 
 module.exports.list = (event, context, callback) => {
+
+  context.callbackWaitsForEmptyEventLoop = false;
 
   const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20`;
   const connection = pg.connect(process.env.PG_CONNECTION_STRING, (err, client, done) => {
