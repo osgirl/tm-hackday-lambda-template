@@ -31,9 +31,13 @@ module.exports.upload = (event, context, callback) => {
   const mime = fileMime.mime;
   const ext = fileMime.ext;
 
+<<<<<<< HEAD
   const id = () => {
       return '_' + Math.random().toString(36).substr(2, 9);
   };
+=======
+  console.log("file mime", fileMime);
+>>>>>>> 7cf6d8b587a38b968514345c9468c4f3fa80908a
 
   //validate image is on right type
   if (fileBuffer.length < 500000 ) {
@@ -42,9 +46,12 @@ module.exports.upload = (event, context, callback) => {
     const timestamp = Math.floor(new Date() / 1000);
     const fileName = `${title}-${timestamp}.${ext}`;
 
+
     const bucket = process.env.BUCKET;
+    const bucket_url = process.env.BUCKET_URL;
     const connectionString = process.env.DATABASE_URL;
-    const tableName = process.env.POSTGRES_TABLE
+    const tableName = process.env.POSTGRES_TABLE;
+    const staticurl = `${BUCKET_URL}/fileName`;
 
     //const client = new pg.Client(connectionString);
 
@@ -62,35 +69,32 @@ module.exports.upload = (event, context, callback) => {
         }
     };
 
-    const data = {
-
-    };
-
     const insert_query = `INSERT INTO ${tableName}(Timestamp, BucketKey, Username, Description, FileName, StaticLink) values($1, $2, $3, $4, $5, $6)`
 
     s3.putObject(params, (err, data) => {
         if (err) callback(new Error([err.statusCode], [err.message]));
 
-        pg.connect(connectionString, (err, client, done)) => {
-          if(err) {
+        pg.connect(connectionString, (err, client, done) => {
+          if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
+
+          client.query(insert_query,[timestamp, bucket, username, description, filename, staticurl], (err, result) => {
+
+            if(err) callback(new Error([err.statusCode], [err.message]));
+
+            client.end();
+
             done();
-            console.log(err);
-            return res.status(500).json({success: false, data: err});
-          };
 
-          client.query(insert_query,[])
-        };
+            callback(null, {
+                  statusCode: '200',
+                  headers: {'Access-Control-Allow-Origin': '*'},
+                  body: JSON.stringify({'data': data})
+              });
 
-
-
-          callback(null, {
-                statusCode: '200',
-                headers: {'Access-Control-Allow-Origin': '*'},
-                body: JSON.stringify({'data': data})
             });
+
+        });
     });
-
-
   } else {
       callback(null, {
           statusCode: '402',
