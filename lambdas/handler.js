@@ -59,7 +59,6 @@ module.exports.upload = (event, context, callback) => {
         }
     };
 
-    const insert_query = `INSERT INTO ${tableName}(Timestamp, BucketKey, Username, Description, FileName, StaticLink) values($1, $2, $3, $4, $5, $6)`
     s3.putObject(params, (err, data) => {
 
         if (err) callback(new Error([err.statusCode], [err.message]));
@@ -99,12 +98,32 @@ module.exports.list = (event, context, callback) => {
   
 }
 
+module.exports.listFromS3 = (event, context, callback) => {
+
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20;`;
+  const client = new pg.Client(process.env.PG_CONNECTION_STRING);
+  client.connect();
+  const query = client.query(listQuery, (err, results) => {
+     client.end();
+
+    callback(null, {
+      statusCode: '200',
+      headers: {'Access-Control-Allow-Origin': '*'},
+      body: JSON.stringify({"results": results})
+    });
+
+  });  
+  
+}
+
 module.exports.store = (event, context, callback) => {
   const connectionString = process.env.PG_CONNECTION_STRING;
   const tableName = process.env.PG_TABLE;
 
   const insert_query = `INSERT INTO ${tableName}(Timestamp, BucketKey, Username, Description, FileName, StaticLink) values($1, $2, $3, $4, $5, $6)`;
-  console.log(event);
+  console.log(JSON.stringify(event, null, 2));
   callback(null, {
     statusCode: '200',
     headers: {'Access-Control-Allow-Origin': '*'},
