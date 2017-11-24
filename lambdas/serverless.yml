@@ -62,7 +62,7 @@ functions:
     events:
       - http:
           path: auth/list
-          method: post
+          method: get
           integration: lambda
           cors: true
           # authorizer:
