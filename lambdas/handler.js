@@ -98,23 +98,52 @@ module.exports.list = (event, context, callback) => {
 
   context.callbackWaitsForEmptyEventLoop = false;
 
-  const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20`;
-  const connection = pg.connect(process.env.PG_CONNECTION_STRING, (err, client, done) => {
-    if(err) {
-      done();
-      console.log(err);
-      callback(null, {
-        statusCode: '500',
-        headers: {'Access-Control-Allow-Origin': '*'},
-        body: JSON.stringify({"message": "Error connecting to the database"})
-      });
-    }
-    done();
-    callback(null, {
-      statusCode: '200',
-      headers: {'Access-Control-Allow-Origin': '*'},
-      body: JSON.stringify({"message": "Connection to DB ok!"})
-    });
+  // const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20;`;
+  // const client = new pg.Client(process.env.PG_CONNECTION_STRING);
+  // console.log(process.env.PG_CONNECTION_STRING);
+  // console.log('connected?');
+  // client.connect((err, res) => {
+  //   console.log(err);
+  //   console.log(res);
+  // });
+  // console.log('connected!');
+  // const query = client.query('SELECT NOW();', (err, results) => {
+  //    client.end();
+  //    console.log(results);
+  //    console.log(err);
+  //   //  callback(null, {
+  //   //   statusCode: '200',
+  //   //   headers: {'Access-Control-Allow-Origin': '*'},
+  //   //   body: JSON.stringify({"message": results})
+  //   // });
 
+  //   context.succeeded(results);
+    // callback(null, {
+    //   statusCode: '200',
+    //   headers: {'Access-Control-Allow-Origin': '*'},
+    //   body: JSON.stringify({"message": "OK"})
+    // });
+
+
+  // });
+
+  // context.callbackWaitsForEmptyEventLoop = false;
+
+  const connectionString ='postgresql://hackers:hackers_password@hackday-pg-template.ckthmwbknecx.eu-west-1.rds.amazonaws.com:5432/hackers_db';
+  const pg = require('pg')
+  const client = new pg.Client(connectionString);
+  client.connect();
+  const query = client.query('SELECT NOW();', (err, results) => {
+       client.end();
+       console.log("RESULTS HEEEEREEEEEE");
+       console.log(results);
+       console.log(err);
+       callback(null, {
+        statusCode: '200',
+        headers: {'Access-Control-Allow-Origin': '*'},
+        body: JSON.stringify({"message": results})
+      });
   });
+  
+  
 }
