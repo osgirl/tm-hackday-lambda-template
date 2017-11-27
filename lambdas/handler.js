@@ -99,6 +99,24 @@ module.exports.list = (event, context, callback) => {
 
 }
 
+<<<<<<< HEAD
+=======
+module.exports.listFromS3 = (event, context, callback) => {
+
+    context.callbackWaitsForEmptyEventLoop = false;
+
+    const params = {
+      Bucket: process.env.BUCKET,
+      MaxKeys: 10
+    };
+   s3.listObjects(params, function(err, data) {
+     if (err) callback(err, null); // an error occurred
+     else     callback(null, data);           // successful response
+   });
+
+};
+
+>>>>>>> 0b3273e80279992b5006f51db1acd8f3e87cfa6c
 module.exports.store = (event, context, callback) => {
   const connectionString = process.env.PG_CONNECTION_STRING;
   const tableName = process.env.PG_TABLE;
@@ -115,6 +133,7 @@ module.exports.store = (event, context, callback) => {
   const url = `${process.env.BUCKET_URL}/${file}`;
 
   const query = client.query(insert_query,[timestamp, event.username, event.description, file, url], (err, results) => {
+    client.end();
     if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
 
     callback(null, {
@@ -122,9 +141,27 @@ module.exports.store = (event, context, callback) => {
       headers: {'Access-Control-Allow-Origin': '*'},
       body: JSON.stringify({"results": results})
     });
-
-    client.end();
-
   });
 
 };
+<<<<<<< HEAD
+=======
+
+module.exports.write = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+    const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20;`;
+    const client = new pg.Client(process.env.PG_CONNECTION_STRING);
+    client.connect();
+    const query = client.query(listQuery, (err, results) => {
+       client.end();
+
+      callback(null, {
+        statusCode: '200',
+        headers: {'Access-Control-Allow-Origin': '*'},
+        body: JSON.stringify({"results": results})
+      });
+
+    });
+}
+>>>>>>> 0b3273e80279992b5006f51db1acd8f3e87cfa6c
