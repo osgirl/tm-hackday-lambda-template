@@ -64,7 +64,7 @@ functions:
         PG_TABLE: hackers_table
       events:
         - http:
-          path: auth/store
-          method: post
-          integration: lambda
-          cors: true
+            path: auth/store
+            method: post
+            integration: lambda
+            cors: true
