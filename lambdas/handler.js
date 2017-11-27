@@ -97,14 +97,14 @@ module.exports.list = (event, context, callback) => {
       body: JSON.stringify({"results": results})
     });
 
-  });  
-  
+  });
+
 }
 
 module.exports.listFromS3 = (event, context, callback) => {
-  
+
     context.callbackWaitsForEmptyEventLoop = false;
-  
+
     const params = {
       Bucket: process.env.BUCKET,
       MaxKeys: 10
@@ -113,91 +113,53 @@ module.exports.listFromS3 = (event, context, callback) => {
      if (err) callback(err, null); // an error occurred
      else     callback(null, data);           // successful response
    });
-    
+
 };
 
 module.exports.store = (event, context, callback) => {
   const connectionString = process.env.PG_CONNECTION_STRING;
   const tableName = process.env.PG_TABLE;
-  const insert_query = `INSERT INTO ${tableName}(Timestamp, BucketKey, Username, Description, FileName, StaticLink) values($1, $2, $3, $4, $5, $6)`;
-  
-  console.log(JSON.stringify(event, null, 2));
-
+  const insert_query = `INSERT INTO ${tableName}(Timestamp, Username, Description, FileName, StaticLink) values($1, $2, $3, $4, $5)`;
+  const timestamp = Math.floor(new Date() / 1000);
+  //console.log(JSON.stringify(event, null, 2));
 
   context.callbackWaitsForEmptyEventLoop = false;
-  
-  // const client = new pg.Client(connectionString);
-  // client.connect();
 
-  const file = event.Records[0].s3.object.key;
+  const client = new pg.Client(connectionString);
+  client.connect();
+
+  const file = event.filename;
   const url = `${process.env.BUCKET_URL}/${file}`;
-  console.log(url);
 
-  fetch(url)
-  .then( (res) => {
-    const headers =  JSON.parse(res.headers);
-    const user = headers['x-amz-meta-user'];
-    const description = headers['x-amz-meta-description'];
-    const options = {
-      uri: process.env.WRITE_URL,
-      body: JSON.stringify({
-        user,
-        description,
-        url,
-        title: 'some title because we forgot'
-      })
-    }
+  const query = client.query(insert_query,[timestamp, event.username, event.description, file, url], (err, results) => {
+    if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
 
-    return post(options);
-  })
-  .then( res =>
     callback(null, {
       statusCode: '200',
       headers: {'Access-Control-Allow-Origin': '*'},
-      body: JSON.stringify({"results": res.body})
-    })
-  );
+      body: JSON.stringify({"results": results})
+    });
 
-  // const query = client.query(insert_query,[event.timestamp, event.bucket, event.username, event.description, event.filename, event.staticurl], (err, results) => {
-  //   if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
-  //   client.end();
+    client.end();
 
-  // });  
+  });
 
-  // callback(null, {
-  //   statusCode: '200',
-  //   headers: {'Access-Control-Allow-Origin': '*'},
-  //   body: JSON.stringify({"results": event})
-  // });
-
-
-  // pg.connect(connectionString, (err, client, done) => {
-  //   if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
-  //
-  //   client.query(insert_query,[event.timestamp, event.bucket, event.username, event.description, event.filename, event.staticurl], (err, result) => {
-  //
-  //     if(err) callback(new Error([err.statusCode], [err.message]));
-  //
-  //     client.end();
-  //
-  //     done();
 };
 
 module.exports.write = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  
+
     const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20;`;
     const client = new pg.Client(process.env.PG_CONNECTION_STRING);
     client.connect();
     const query = client.query(listQuery, (err, results) => {
        client.end();
-  
+
       callback(null, {
         statusCode: '200',
         headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify({"results": results})
       });
-  
-    }); 
-}
 
+    });
+}
