@@ -99,7 +99,6 @@ module.exports.list = (event, context, callback) => {
 
 }
 
-<<<<<<< HEAD
 module.exports.listFromS3 = (event, context, callback) => {
 
     context.callbackWaitsForEmptyEventLoop = false;
@@ -115,8 +114,6 @@ module.exports.listFromS3 = (event, context, callback) => {
 
 };
 
-=======
->>>>>>> 4f03eb30043ff6d218be3af1b7d1452293bef63f
 module.exports.store = (event, context, callback) => {
   const connectionString = process.env.PG_CONNECTION_STRING;
   const tableName = process.env.PG_TABLE;
@@ -147,7 +144,6 @@ module.exports.store = (event, context, callback) => {
 
 };
 
-<<<<<<< HEAD
 module.exports.write = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
@@ -162,8 +158,6 @@ module.exports.write = (event, context, callback) => {
         headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify({"results": results})
       });
-=======
->>>>>>> 4f03eb30043ff6d218be3af1b7d1452293bef63f
 
     });
 }
