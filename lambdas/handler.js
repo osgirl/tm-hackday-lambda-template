@@ -128,7 +128,10 @@ module.exports.store = (event, context, callback) => {
     callback(null, {
       statusCode: '200',
       headers: {'Access-Control-Allow-Origin': '*'},
-      body: JSON.stringify({"results": results})
+      body: JSON.stringify({
+        "url": url,
+        "description": event.body.description
+      })
     });
   });
 
