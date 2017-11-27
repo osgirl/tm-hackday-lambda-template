@@ -99,24 +99,6 @@ module.exports.list = (event, context, callback) => {
 
 }
 
-<<<<<<< HEAD
-module.exports.listFromS3 = (event, context, callback) => {
-
-    context.callbackWaitsForEmptyEventLoop = false;
-
-    const params = {
-      Bucket: process.env.BUCKET,
-      MaxKeys: 10
-    };
-   s3.listObjects(params, function(err, data) {
-     if (err) callback(err, null); // an error occurred
-     else     callback(null, data);           // successful response
-   });
-
-};
-
-=======
->>>>>>> 4f03eb30043ff6d218be3af1b7d1452293bef63f
 module.exports.store = (event, context, callback) => {
   const connectionString = process.env.PG_CONNECTION_STRING;
   const tableName = process.env.PG_TABLE;
@@ -146,24 +128,3 @@ module.exports.store = (event, context, callback) => {
   });
 
 };
-
-<<<<<<< HEAD
-module.exports.write = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-
-    const listQuery = `SELECT * FROM ${process.env.PG_TABLE} ORDER BY timestamp DESC LIMIT 20;`;
-    const client = new pg.Client(process.env.PG_CONNECTION_STRING);
-    client.connect();
-    const query = client.query(listQuery, (err, results) => {
-       client.end();
-
-      callback(null, {
-        statusCode: '200',
-        headers: {'Access-Control-Allow-Origin': '*'},
-        body: JSON.stringify({"results": results})
-      });
-=======
->>>>>>> 4f03eb30043ff6d218be3af1b7d1452293bef63f
-
-    });
-}
