@@ -134,7 +134,6 @@ module.exports.store = (event, context, callback) => {
   });
 
 };
-<<<<<<< HEAD
 
 module.exports.analyze = (event, context, callback) => {
   const data = event.body;
@@ -143,12 +142,6 @@ module.exports.analyze = (event, context, callback) => {
     bucket: data.bucket,
     imageName: data.key,
   };
-
-  // callback(null, {
-  //   statusCode: '200',
-  //   headers: {'Access-Control-Allow-Origin': '*'},
-  //   body: JSON.stringify({"results": s3Config})
-  // });
 
   return ImageAnalyser
     .getImageLabels(s3Config)
@@ -170,5 +163,3 @@ module.exports.analyze = (event, context, callback) => {
 
 
 };
-=======
->>>>>>> 41940d85aa42b7285319cc189625f6fb8d3eb72c

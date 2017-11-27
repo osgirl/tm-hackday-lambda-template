@@ -2,12 +2,11 @@
 
 const AWS = require('aws-sdk');
 
-
 const rek = new AWS.Rekognition();
 
-class ImageAnalyser {
+const  ImageAnalyser = {
 
-  static getImageLabels(s3Config) {
+  getImageLabels: (s3Config) => {
     const params = {
       Image: {
         S3Object: {
