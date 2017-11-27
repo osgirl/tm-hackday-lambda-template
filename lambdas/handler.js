@@ -36,7 +36,7 @@ module.exports.upload = (event, context, callback) => {
   const ext = fileMime.ext;
 
   //validate image is on right type
-  if (fileBuffer.length < 500000 ) {
+  if (fileBuffer.length < 5000000 ) {
 
     // upload it to s3 with unix timestamp as a file name
     const timestamp = Math.floor(new Date() / 1000);
