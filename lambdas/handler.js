@@ -130,6 +130,7 @@ module.exports.store = (event, context, callback) => {
   const url = `${process.env.BUCKET_URL}/${file}`;
 
   const query = client.query(insert_query,[timestamp, event.username, event.description, file, url], (err, results) => {
+    client.end();
     if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
 
     callback(null, {
@@ -137,9 +138,6 @@ module.exports.store = (event, context, callback) => {
       headers: {'Access-Control-Allow-Origin': '*'},
       body: JSON.stringify({"results": results})
     });
-
-    client.end();
-
   });
 
 };
