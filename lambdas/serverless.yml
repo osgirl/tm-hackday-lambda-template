@@ -65,6 +65,6 @@ functions:
       events:
         - http:
           path: auth/store
-          method: get
+          method: post
           integration: lambda
           cors: true
