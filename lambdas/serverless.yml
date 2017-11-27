@@ -23,18 +23,6 @@ functions:
             arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
             claims:
               - email
-  goodNight:
-    handler: handler.goodNight
-    events:
-      - http:
-          path: auth/good-night
-          method: post
-          integration: lambda
-          cors: true
-          authorizer:
-            arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
-            claims:
-              - email
   upload:
     handler: handler.upload
     runtime: nodejs6.10

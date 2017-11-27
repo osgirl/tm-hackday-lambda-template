@@ -15,10 +15,6 @@ module.exports.hello = (event, context, callback) => {
   }});
 };
 
-module.exports.goodNight = (event, context, callback) => {
-  callback(null, { Message: 'Good Night World!'});
-};
-
 module.exports.upload = (event, context, callback) => {
 
   // stops lingering on event loop
