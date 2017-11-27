@@ -41,8 +41,6 @@ functions:
     environment:
       BUCKET: tm-hackday-photo-bucket-template-2
       BUCKET_URL: http://tm-hackday-photo-bucket-template-2.s3-website-eu-west-1.amazonaws.com
-      PG_CONNECTION_STRING: postgresql://hackers:hackers_password@hackday-pg-template.ckthmwbknecx.eu-west-1.rds.amazonaws.com:5432/hackers_db
-      PG_TABLE: hackers_table
     events:
       - http:
           path: auth/upload
