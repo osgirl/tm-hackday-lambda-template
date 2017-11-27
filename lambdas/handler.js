@@ -8,6 +8,7 @@ const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const pg = require("pg");
 const fetch = require('request-promised').get;
 const post = require('request-promised').post;
+const dateTime = require('date-time');
 
 
 module.exports.hello = (event, context, callback) => {
@@ -106,17 +107,18 @@ module.exports.store = (event, context, callback) => {
   const tableName = process.env.PG_TABLE;
   const insert_query = `INSERT INTO ${tableName}(Timestamp, Username, Description, FileName, StaticLink) values($1, $2, $3, $4, $5)`;
   const timestamp = Math.floor(new Date() / 1000);
-  //console.log(JSON.stringify(event, null, 2));
+  console.log(JSON.stringify(event, null, 2));
+  console.log(dateTime());
 
   context.callbackWaitsForEmptyEventLoop = false;
 
   const client = new pg.Client(connectionString);
   client.connect();
 
-  const file = event.filename;
+  const file = event.body.filename;
   const url = `${process.env.BUCKET_URL}/${file}`;
 
-  const query = client.query(insert_query,[timestamp, event.username, event.description, file, url], (err, results) => {
+  const query = client.query(insert_query,[dateTime(), event.body.username, event.body.description, file, url], (err, results) => {
     client.end();
     if(err) callback( null, {
       statusCode: '500',
@@ -132,6 +134,7 @@ module.exports.store = (event, context, callback) => {
   });
 
 };
+<<<<<<< HEAD
 
 module.exports.analyze = (event, context, callback) => {
   const data = event.body;
@@ -167,3 +170,5 @@ module.exports.analyze = (event, context, callback) => {
 
 
 };
+=======
+>>>>>>> 41940d85aa42b7285319cc189625f6fb8d3eb72c
