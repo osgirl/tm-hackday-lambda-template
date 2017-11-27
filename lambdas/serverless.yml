@@ -71,7 +71,29 @@ functions:
           #     - email
   save-to-postgres:
       handler: handler.store
+      environment:
+        BUCKET: tm-hackday-photo-bucket-template-2
+        BUCKET_URL: http://tm-hackday-photo-bucket-template-2.s3-website-eu-west-1.amazonaws.com
+        PG_CONNECTION_STRING: postgresql://hackers:hackers_password@hackday-pg-template.ckthmwbknecx.eu-west-1.rds.amazonaws.com:5432/hackers_db
+        PG_TABLE: hackers_table
+        WRITE_URL: https://tfuh8kzd5m.execute-api.eu-west-1.amazonaws.com/dev/auth/write
       events:
         - s3:
             bucket: tm-hackday-photo-bucket-template-2
             event: s3:ObjectCreated:*
+  write-to-postgres:
+    handler: handler.write
+    runtime: nodejs6.10
+    environment:
+      PG_CONNECTION_STRING: postgresql://hackers:hackers_password@hackday-pg-template.ckthmwbknecx.eu-west-1.rds.amazonaws.com:5432/hackers_db
+      PG_TABLE: hackers_table
+    events:
+      - http:
+          path: auth/write
+          method: post
+          integration: lambda
+          cors: true
+          # authorizer:
+          #   arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
+          #   claims:
+          #     - email

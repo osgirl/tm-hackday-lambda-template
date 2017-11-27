@@ -19,6 +19,7 @@
   "dependencies": {
     "aws-sdk": "^2.156.0",
     "file-type": "^7.3.0",
-    "pg": "^6.1.2"
+    "pg": "^6.1.2",
+    "request-promised": "^1.0.2"
   }
 }
