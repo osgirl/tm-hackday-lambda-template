@@ -117,7 +117,11 @@ module.exports.store = (event, context, callback) => {
 
   const query = client.query(insert_query,[timestamp, event.username, event.description, file, url], (err, results) => {
     client.end();
-    if(err) callback(new Error([err.statusCode], res.status(500).json({success: false, data: err} )));
+    if(err) callback( null, {
+      statusCode: '500',
+      headers: {'Access-Control-Allow-Origin': '*'},
+      body: JSON.stringify({"message": err})
+    });
 
     callback(null, {
       statusCode: '200',
