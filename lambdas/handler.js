@@ -2,6 +2,7 @@
 
 const AWS = require('aws-sdk');
 const fileType = require('file-type');
+const ImageAnalyser = require('./lib/rekognition');
 
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const pg = require("pg");
@@ -132,3 +133,37 @@ module.exports.store = (event, context, callback) => {
 
 };
 
+module.exports.analyze = (event, context, callback) => {
+  const data = event.body;
+
+  const s3Config = {
+    bucket: data.bucket,
+    imageName: data.key,
+  };
+
+  // callback(null, {
+  //   statusCode: '200',
+  //   headers: {'Access-Control-Allow-Origin': '*'},
+  //   body: JSON.stringify({"results": s3Config})
+  // });
+
+  return ImageAnalyser
+    .getImageLabels(s3Config)
+    .then((labels) => {
+      const response = {
+        statusCode: 200,
+        headers: {'Access-Control-Allow-Origin': '*'},
+        body: JSON.stringify({ Labels: labels }),
+      };
+      callback(null, response);
+    })
+    .catch((error) => {
+      callback(null, {
+        statusCode: error.statusCode || 501,
+        headers: { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' },
+        body: error.message || 'Internal server error',
+      });
+    });
+
+
+};
