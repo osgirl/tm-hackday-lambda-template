@@ -35,10 +35,10 @@ functions:
           method: post
           integration: lambda
           cors: true
-          # authorizer:
-          #   arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
-          #   claims:
-          #     - email
+           authorizer:
+             arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
+             claims:
+               - email
   list:
     handler: handler.list
     runtime: nodejs6.10
@@ -51,10 +51,10 @@ functions:
           method: get
           integration: lambda
           cors: true
-          # authorizer:
-          #   arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
-          #   claims:
-          #     - email
+           authorizer:
+             arn: "arn:aws:cognito-idp:eu-west-1:609663566429:userpool/eu-west-1_YR7d9vSOI"
+             claims:
+               - email
   save-to-postgres:
       handler: handler.store
       environment:
